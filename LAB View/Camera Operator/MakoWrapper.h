@@ -1,0 +1,17 @@
+int Mako_Startup(void);
+int Mako_Shutdown(void);
+int Mako_Open(const char* cameraId);
+int Mako_Close(void);
+int Mako_Setup(void);
+int Mako_Stop(void);
+int Mako_GetWidth(void);
+int Mako_GetHeight(void);
+int Mako_GetPayloadSize(void);
+int Mako_SetExposure(double exposureUs);
+int Mako_SetGain(double gain);
+int Mako_TestFrame(void);
+int Mako_SetExposureAuto(int autoOn);
+int Mako_SetGainAuto(int autoOn);
+double Mako_GetExposure(void);
+double Mako_GetGain(void);
+int Mako_GetFrame(unsigned char* outBuffer, unsigned int bufferSize, unsigned int* outWidth, unsigned int* outHeight, unsigned int timeoutMs);
