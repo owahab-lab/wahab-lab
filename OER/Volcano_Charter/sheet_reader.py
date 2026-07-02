@@ -13,9 +13,10 @@ from trial_reader import TrialReader
 class SheetReader:
     """One sheet per sample, multiple [E, j] column pairs per sheet."""
 
-    def __init__(self, name: str, raw_df: pd.DataFrame):
+    def __init__(self, name: str, raw_df: pd.DataFrame, is_lsv: bool = False):
         self.name = name
         self.raw_df = raw_df
+        self.is_lsv = is_lsv
         self.trials: list[TrialReader] = []
         self._parse_trials()
 
@@ -29,7 +30,8 @@ class SheetReader:
             try:
                 arr = df[[col_E, col_j]].dropna().to_numpy(dtype=float)
                 self.trials.append(TrialReader(
-                    arr, trial_index=i, label=f"{self.name} - Trial {i+1}"))
+                    arr, trial_index=i, label=f"{self.name} - Trial {i+1}",
+                    is_lsv=self.is_lsv))
             except ValueError as e:
                 print(f"[{self.name}] skipping trial {i+1}: {e}")
 

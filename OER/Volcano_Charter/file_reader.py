@@ -12,8 +12,9 @@ from sheet_reader import SheetReader
 class FileReader:
     """Top-level object for one Excel file."""
 
-    def __init__(self, file_path: str):
+    def __init__(self, file_path: str, is_lsv: bool = False):
         self.file_path = file_path
+        self.is_lsv = is_lsv
         self.sheets: list[SheetReader] = []
         self._load()
 
@@ -24,7 +25,8 @@ class FileReader:
             raise IOError(f"Could not open '{self.file_path}': {e}")
         for name in xl.sheet_names:
             df = pd.read_excel(self.file_path, sheet_name=name, header=0)
-            self.sheets.append(SheetReader(name=str(name), raw_df=df))
+            self.sheets.append(SheetReader(
+                name=str(name), raw_df=df, is_lsv=self.is_lsv))
 
     def summary(self):
         print(f"File: {self.file_path}")

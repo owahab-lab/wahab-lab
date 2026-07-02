@@ -76,12 +76,24 @@ def write_results_sheet(file_path: str, f: FileReader,
     print(f"Results written to 'Results' sheet in {file_path}")
 
 
+def ask_is_lsv() -> bool:
+    while True:
+        raw = input(
+            "Is this LSV data [y/n]: ").strip().lower()
+        if raw in ("y", "yes"):
+            return True
+        if raw in ("n", "no"):
+            return False
+        print("  Please answer 'y' or 'n'.")
+
+
 if __name__ == "__main__":
     os.system('clear' if os.name == 'posix' else 'cls')
     file_path = os.path.abspath(
         input("Drag in the Excel file: ").strip().strip("'\""))
+    is_lsv = ask_is_lsv()
 
-    f = FileReader(file_path)
+    f = FileReader(file_path, is_lsv=is_lsv)
     f.summary()
 
     voltages = parse_floats("\nVoltages to look up (e.g. 1.5 1.55 1.6): ")

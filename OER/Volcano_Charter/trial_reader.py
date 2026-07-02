@@ -2,22 +2,26 @@
 Filename: trial_reader.py
 Author: Patryk Nowak
 Date: 18-6-2026
-Description: One CV trial — forward/reverse sweep with interpolated lookups
+Description: One CV or LSV trial — forward/reverse sweep with interpolated lookups
 """
 
 import numpy as np
 
 
 class TrialReader:
-    """One CV sweep. Forward = anodic (first half), reverse = cathodic (second half)."""
+    """One sweep. For CV: forward = anodic (first half), reverse = cathodic (second half).
+    For LSV: there's only one direction, so the full sweep is used, uncut."""
 
-    def __init__(self, data: np.ndarray, trial_index: int, label: str = ""):
+    def __init__(self, data: np.ndarray, trial_index: int, label: str = "", is_lsv: bool = False):
         self.data = data.copy()
         self.trial_index = trial_index
         self.label = label or f"Trial {trial_index}"
+        self.is_lsv = is_lsv
 
     @property
     def forward(self) -> np.ndarray:
+        if self.is_lsv:
+            return self.data
         return self.data[: len(self.data) // 2]
 
     def _fwd_columns(self):
