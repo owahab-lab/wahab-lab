@@ -1,7 +1,7 @@
 """
 Filename: main.py
 Author: Patryk Nowak
-Date: 18-6-2026
+Date: 22-9-2026
 Description: Entry point — looks up j/E values across trials and writes a Results sheet
 """
 
@@ -14,17 +14,17 @@ from file_reader import FileReader
 def parse_sheet_name(name: str) -> tuple[float | None, float | None]:
     """Extract n and orbital filling from a sheet name like 'CALZ702-z (2-1-3)'.
 
-    Given (x-y-z): n = y, q = (2z - 3x) / y, orbital_filling = 10 - q.
-    Returns (None, None) if the pattern is missing or y == 0.
+    Given (la-ni-o): n = ni,orbital_filling = 10 - q.
+    Returns (None, None) if the pattern is missing or ni == 0.
     """
     m = re.search(r'\((\d+)-(\d+)-(\d+)\)', name)
     if not m:
         return None, None
-    x, y, z = float(m.group(1)), float(m.group(2)), float(m.group(3))
-    if y == 0:
+    la, ni, o = float(m.group(1)), float(m.group(2)), float(m.group(3))
+    if ni == 0:
         return None, None
-    q = (2 * z - 3 * x) / y
-    return y, 10 - q
+    orbital_filling = 28-(2*o - 3*la)/ni
+    return ni, orbital_filling
 
 
 def parse_floats(prompt: str) -> list[float]:
